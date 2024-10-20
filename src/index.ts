@@ -3,8 +3,6 @@ import "dotenv/config";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-
-import "./controllers/bucket";
 import connectToDB from "./db/connectToDB";
 import ApiError from "./errors/ApiError";
 import * as errors from "./middleware/error";

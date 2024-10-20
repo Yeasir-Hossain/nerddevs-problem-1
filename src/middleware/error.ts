@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import httpStatus from "http-status";
 import ApiError from "../errors/ApiError";
 
 /**
@@ -12,8 +11,8 @@ import ApiError from "../errors/ApiError";
 export function converter(err: ApiError, _req: Request, _res: Response, next: NextFunction) {
   let error = err;
   if (!(error instanceof ApiError)) {
-    const status = err.status || httpStatus.BAD_REQUEST;
-    const message = err.message || httpStatus[httpStatus.BAD_REQUEST];
+    const status = err.status || 400;
+    const message = err.message || "Bad request";
     error = new ApiError(status, message, false, err.stack);
   }
   next(error);
@@ -29,8 +28,8 @@ export function converter(err: ApiError, _req: Request, _res: Response, next: Ne
 export function handler(err: ApiError, _req: Request, res: Response, _next: NextFunction) {
   let { status, message } = err;
   if (process.env.NODE_ENV === "production" && !err.operational) {
-    status = httpStatus.INTERNAL_SERVER_ERROR;
-    message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
+    status = 500;
+    message = "Internal Server Error";
   }
 
   res.locals.errorMessage = err.message;
